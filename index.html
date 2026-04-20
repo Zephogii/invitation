@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You ❤️</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  text-align: center;
+  background: linear-gradient(135deg, #ffe6eb, #fff);
+  overflow: hidden;
+}
+
+h1 {
+  margin-top: 100px;
+  font-size: 2.5rem;
+  color: #333;
+}
+
+.container {
+  margin-top: 40px;
+}
+
+button {
+  padding: 15px 30px;
+  font-size: 18px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  margin: 10px;
+  transition: all 0.3s ease;
+}
+
+#yesBtn {
+  background: #28a745;
+  color: white;
+}
+
+#noBtn {
+  background: #dc3545;
+  color: white;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Floating hearts */
+.heart {
+  position: absolute;
+  color: pink;
+  font-size: 20px;
+  animation: float 6s linear infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(100vh);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-10vh);
+    opacity: 0;
+  }
+}
+
+/* Final screen */
+#final {
+  display: none;
+  margin-top: 100px;
+  font-size: 2rem;
+  color: #ff4d6d;
+}
+</style>
+</head>
+
+<body>
+
+<h1 id="question">Will you go out with me? 💖</h1>
+
+<div class="container">
+  <button id="yesBtn">YES 💚</button>
+  <button id="noBtn">NO ❤️</button>
+</div>
+
+<div id="final">YAYYY 💕 I knew it! See you soon 😘</div>
+
+<script>
+let yesSize = 1;
+let noSize = 1;
+
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const question = document.getElementById("question");
+const final = document.getElementById("final");
+
+const noMessages = [
+  "Are you sure? 😢",
+  "Really sure? 🥺",
+  "Think again 😭",
+  "Last chance 😤",
+  "I'll bring food 👀",
+  "I’ll treat you 😳",
+  "Please? 🥹",
+  "Okay this is getting sad 😞"
+];
+
+let noIndex = 0;
+
+noBtn.addEventListener("click", () => {
+  question.textContent = noMessages[noIndex % noMessages.length];
+  noIndex++;
+
+  yesSize += 0.2;
+  yesBtn.style.transform = `scale(${yesSize})`;
+
+  noSize -= 0.1;
+  if (noSize > 0.3) {
+    noBtn.style.transform = `scale(${noSize})`;
+  }
+});
+
+yesBtn.addEventListener("click", () => {
+  document.querySelector(".container").style.display = "none";
+  question.style.display = "none";
+  final.style.display = "block";
+  startConfetti();
+});
+
+/* Floating hearts generator */
+function createHeart() {
+  const heart = document.createElement("div");
+  heart.classList.add("heart");
+  heart.innerHTML = "💖";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.fontSize = (Math.random() * 20 + 10) + "px";
+  document.body.appendChild(heart);
+
+  setTimeout(() => {
+    heart.remove();
+  }, 6000);
+}
+
+setInterval(createHeart, 300);
+
+/* Confetti */
+function startConfetti() {
+  for (let i = 0; i < 100; i++) {
+    let conf = document.createElement("div");
+    conf.style.position = "absolute";
+    conf.style.width = "10px";
+    conf.style.height = "10px";
+    conf.style.background = "hsl(" + Math.random() * 360 + ",100%,50%)";
+    conf.style.left = Math.random() * 100 + "vw";
+    conf.style.top = "-10px";
+    conf.style.opacity = 0.7;
+    conf.style.transform = "rotate(" + Math.random()*360 + "deg)";
+    document.body.appendChild(conf);
+
+    let fall = setInterval(() => {
+      conf.style.top = (conf.offsetTop + 5) + "px";
+      if (conf.offsetTop > window.innerHeight) {
+        conf.remove();
+        clearInterval(fall);
+      }
+    }, 20);
+  }
+}
+</script>
+
+</body>
+</html>
